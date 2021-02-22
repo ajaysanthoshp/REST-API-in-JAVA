@@ -1,0 +1,211 @@
+
+  Task breakdown:
+
+1.    Setup a local database, create a table, insert some records using any database client 
+2.    Write SQL to insert and retrieve records from the above table using the same database client  
+3.    Write java code to insert and retrieve the records from the database table. 
+4.    Create a REST API in JAVA to insert and retrieve the same records.    
+
+
+
+1.    Setup a local database, create a table, insert some records using any database client 
+
+
+  CREATE DATABASE SampleDB;
+
+    USE SampleDB;
+
+    CREATE TABLE users (
+        user_id int(11) NOT NULL AUTO_INCREMENT,
+        username varchar(45) NOT NULL,
+        password varchar(45) NOT NULL,
+        fullname varchar(45) NOT NULL,
+        email varchar(45) NOT NULL,
+        PRIMARY KEY (user_id)
+        );
+
+    SELECT * FROM sampledb.users;
+    
+
+     INSERT INTO users(user_id,username,password,fullname,email)
+     VALUES(1011, 'santhu', '2568978', 'ajaysanthosh','ajaysanthosh@gmail.com');
+
+    user_id       username      password       fullname                email
+    1011           santhu        2568978     ajaysanthosh        ajaysanthosh@gmail.com
+    1012           mintu         2588978      nishanth          m.nishanthh@gmail.com
+    1013           minnu         2578778      lokesh              m.lokesh@gmail.com
+    1014           sandy         2568678      sandeep              sandeep@gmail.com
+    1015          chinna         2568588      koushik              koushik@gmail.com
+
+
+2.    Write SQL to insert and retrieve records from the above table using the same database client  
+
+       Insert records:   MYSQL : Database Client
+          INSERT INTO sampledb.users (user_id,username,password,fullname,email) 
+           VALUES (:user_id,:username,:password:,:fullname,:email)
+     
+       Retreive Records:  MYSQL : Database Client
+          SELECT * FROM sampledb.users;
+
+
+ 3.   Write java code to insert and retrieve the records from the database table.
+    
+     	java code to Insert records from Database table:
+
+       package TableDemo;
+       import java.sql.*;
+ 
+      public class InsertRecord
+      {
+           static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+           static final String dburl = "jdbc:mysql://localhost/sampleDB";    
+           static final String dbuser = "root";
+           static final String dbpass = "root";
+    
+     public static void main(String[] args)
+      {
+         Connection con = null;
+         Statement stmt = null;
+ 
+    try 
+    {
+     //Step 1 : Connecting to server and database
+     con = DriverManager.getConnection(dburl, dbuser, dbpass);     
+     //Step 2 : Initialize Statement
+     stmt=con.createStatement();
+     //Step 3 : SQL Query
+     String query="INSERT INTO users(user_id,username,password,fullname,email)
+                   VALUES(1011, 'santhu', '2568978', 'ajaysanthosh','ajaysanthosh@gmail.com');
+     String query1="INSERT INTO users(user_id,username,password,fullname,email)
+                   VALUES(1012, 'mintu', '2588978', 'nishanth','m.nishanth@gmail.com');
+     String query2="INSERT INTO users(user_id,username,password,fullname,email)
+                   VALUES(1013, 'minnu', '2578778', 'lokesh','m.lokesh@gmail.com');
+     String query3="INSERT INTO users(user_id,username,password,fullname,email)
+                   VALUES(1014, 'sandy', '2568678', 'sandeep','sandeep@gmail.com');
+     String query4="INSERT INTO users(user_id,username,password,fullname,email)
+                   VALUES(1015, 'chinna', '2568588', 'koushik','koushik@gmail.com');
+     
+     
+     
+     
+     //Step 4 : Run Query
+     
+     stmt.executeUpdate(query);
+     stmt.executeUpdate(query1);
+     stmt.executeUpdate(query2);
+     stmt.executeUpdate(query3);
+     stmt.executeUpdate(query4);
+     
+     System.out.println("Record Inserted Successfully");
+   } 
+ 
+    catch (SQLException e) 
+    {
+     System.err.println("Cannot connect ! ");
+     e.printStackTrace();
+    }
+ 
+   finally {
+     System.out.println("Closing the connection.");
+     if (con != null) try { con.close(); } catch (SQLException ignore) {}
+  }
+ 
+ }
+ }
+   Output:
+    Record Inserted Successfully
+   
+     _
+   RETRIEVE RECORDS
+  Once you inserted record you can retrieve record using ResultSet Object of JDBC. Here is the complete programming example of retrieving data from MySQL using JDBC.
+
+     package TableDemo;
+     import java.sql.*;
+
+      import java.sql.Connection;
+      import java.sql.DriverManager;
+      import java.sql.SQLException;
+      import java.sql.Statement;
+
+      public class SelectRecord
+       {
+	   static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
+	   static final String dburl = "jdbc:mysql://localhost/sampleDB";	   
+	   static final String dbuser = "root";
+	   static final String dbpass = "root";
+	   
+        public static void main(String[] args)
+       {
+	Connection con = null;
+	Statement stmt = null;
+	
+	try 
+	{
+	    //Step 1 : Connecting to server and database
+	    con = DriverManager.getConnection(dburl, dbuser, dbpass);	    
+	    //Step 2 : Initialize Statement
+	    stmt=con.createStatement();
+	    //Step 3 : SQL Query
+	    String query="SELECT * FROM Sampledb.users";
+	    
+	    //Step 4 : Run Query In ResultSet
+	    ResultSet rset = stmt.executeQuery(query);
+	    while(rset.next())
+	    {
+	    	System.out.print("ID: " + rset.getInt(1));
+   	    	System.out.print(" username : "+rset.getString(2));
+   	    	System.out.println(" Password : "+rset.getString(3));
+                System.out.println("fullname : "+rset.getString(4));
+                System.out.println("email : "+rset.getstring(5));
+
+
+
+	    }
+	} 
+	
+	catch (SQLException e) 
+	{
+	    System.err.println("Cannot connect ! ");
+	    e.printStackTrace();
+	}
+	
+	finally {
+	    System.out.println("Closing the connection.");
+	    if (con != null) try { con.close(); } catch (SQLException ignore) {}
+	}
+	
+}
+}
+
+ 
+
+    Output:
+    user_id       username      password       fullname                email
+    1011           santhu        2568978     ajaysanthosh        ajaysanthosh@gmail.com
+    1012           mintu         2588978      nishanth          m.nishanthh@gmail.com
+    1013           minnu         2578778      lokesh              m.lokesh@gmail.com
+    1014           sandy         2568678      sandeep              sandeep@gmail.com
+    1015          chinna         2568588      koushik              koushik@gmail.com
+
+
+      Closing the connection.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          
+              
